@@ -1,0 +1,51 @@
+a_user_name = "";
+
+int verify_user_pass(char *param_1)
+{
+  char *pbVar2;
+  pbVar2 = (char *)"admin";
+  
+  return (strncmp(pbVar2,param_1,5));
+}
+
+int verify_user_name(void)
+{
+  char *pbVar3;
+  
+  puts("verifying username....\n");
+  pbVar3 = (char *)"dat_wil";
+  return (strncmp(pbVar3, a_user_name,7));
+}
+
+
+
+int main(void)
+{
+  int iVar1; 
+  char local_54 [16];
+  int local_14;
+
+  local_14 = 0;
+  puts("********* ADMIN LOGIN PROMPT *********");
+  printf("Enter Username: ");
+  fgets(a_user_name,0x100,stdin);
+  local_14 = verify_user_name();
+  if (local_14 == 0) {
+    puts("Enter Password: ");
+    fgets((char *)local_54,100,stdin);
+    local_14 = verify_user_pass(local_54);
+    if ((local_14 == 0) || (local_14 != 0)) {
+      puts("nope, incorrect password...\n");
+      iVar1 = 1;
+    }
+    else {
+      iVar1 = 0;
+    }
+  }
+  else {
+    puts("nope, incorrect username...\n");
+    iVar1 = 1;
+  }
+  return iVar1;
+}
+
