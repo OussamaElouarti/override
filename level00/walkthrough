@@ -1,0 +1,7 @@
+Level00
+
+We have a binary called level00
+Lets use gdb and try to debug it we have one comparaison that compare the input with 5276
+
+Payload:
+(echo "5276";cat) | ./level00
