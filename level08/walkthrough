@@ -1,0 +1,10 @@
+# level08
+#
+
+This level contains a logger program, which takes a file as in command line arguments and backs it up, in a directory referenced with a relative path.
+
+We can change the current directory in order to control that relative path, creating our own.
+
+We change directory to /tmp create backups folder inside it .log file, then when trying to backup the flag (/home/users/level09/.pass) open fails because that paths does not exists (./backups/home/users/level09)
+
+Since any user have read and write permission in /tmp we can mkdir -p /tmp/backups/home/users/level09, finally the program backs the flag onto /tmp/backups/home/users/level09/.pass

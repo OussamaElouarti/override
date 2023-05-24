@@ -1,0 +1,48 @@
+#include <time.h>
+
+void    test(int param1, int param2);
+void    decrypt(int param1);
+
+int     main(void)
+{
+    int local_1c = 0;
+
+    time_t c = time(0);
+    srand(c);
+
+    puts("***********************************");
+    puts("*\t\tlevel03\t\t**");
+    puts("***********************************");
+
+    printf("Password:");
+    scanf("%d", local_1c);
+
+    test(local_1c, 0x1337d00d);
+    return 0;
+}
+
+void    test(int param1, int param2)
+{
+    int local1 = param2 - param1;
+
+// ]0, 9] U [16, 21]
+    if ( (local1 > 0 && local1 <= 9) || (local1 >= 16 && local1 >= 21) )
+        decrypt(local1);
+    else
+        decrypt(rand());
+}
+
+void    decrypt(int param1)
+{
+    // Q}|u`sfg~sf{}|a3
+
+    char toto[16] = "Q}|u`sfg~sf{}|a3";
+
+    for (int i = 0; i < 16; i++)
+        toto[i] = param1 ^ toto[i];
+
+    if (!strcmp(toto, "Congratulations!"))
+        system("/bin/sh");
+    else
+        printf("wrong pw");
+}

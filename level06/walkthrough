@@ -1,23 +1,27 @@
+## level06
+#
 
+In this level we will bypass ptrace call by overwriting it's return in order to read the value compared to our input that gives us a shell.
 
+After that we simply input that number.
 
-
- 0x080487b5 <+109>:	call   0x80485f0 <ptrace@plt>
+```
+0x080487b5 <+109>:	call   0x80485f0 <ptrace@plt>
 0x080487ba <+114>:	cmp    eax,0xffffffff
 
 Breakpoint 2, 0x080487ba in auth ()
 (gdb) set $eax=0
 (gdb) c
 
-   0x08048866 <+286>:	cmp    eax,DWORD PTR [ebp-0x10]
-   0x08048869 <+289>:	je     0x8048872 <auth+298>
-   0x0804886b <+291>:	mov    eax,0x1
-   0x08048870 <+296>:	jmp    0x8048877 <auth+303>
-   0x08048872 <+298>:	mov    eax,0x0
+0x08048866 <+286>:	cmp    eax,DWORD PTR [ebp-0x10]
+0x08048869 <+289>:	je     0x8048872 <auth+298>
+0x0804886b <+291>:	mov    eax,0x1
+0x08048870 <+296>:	jmp    0x8048877 <auth+303>
+0x08048872 <+298>:	mov    eax,0x0
 
 
-   (gdb) x/wu $ebp-0x10
-   0xffffd678:	6233777
+(gdb) x/wu $ebp-0x10
+0xffffd678:	6233777
+```
  
- 
- (python -c "print 'hamidox\n' + '6233777'";cat) | ./level06
+(python -c "print 'hamidox\n' + '6233777'";cat) | ./level06

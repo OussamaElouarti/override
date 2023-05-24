@@ -1,0 +1,17 @@
+# level09
+#
+
+In this level the program calls handle_msg function, which passes the same argument onto both functions, set_username and set_message.
+
+in set_username the program reads 0x80 bytes from the input and copies the first 41 bytes of the input onto (parameter + 0x8c)
+
+the second function set_msg reads 0x400 bytes from the input then copies (int)*(parameter + 0xb4) bytes onto (parameter)
+
+the distance between the local in handle_msg stack frame and the location of the return address is 200, this means the second copy should be greater than 204.
+
+Luckily the copy size is relative to our first input.
+
+There is a function called secret_backdoor which reads from the input the argument for system.
+
+payload will be:
+python -c "print 40*'a'+'\xff'+'\n'+200*'a'+'\x8c\x48\x55\x55\x55\x55\x00\x00'"

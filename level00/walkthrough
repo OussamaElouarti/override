@@ -1,7 +1,5 @@
-Level00
+# level00 walkthrough
+#
 
-We have a binary called level00
-Lets use gdb and try to debug it we have one comparaison that compare the input with 5276
-
-Payload:
-(echo "5276";cat) | ./level00
+* The binary reads an integer from input and compares that integer with the literal 0x149c, if
+the comparison is true it executes /bin/sh with system, if not it prints "Invalid Password" and returns.

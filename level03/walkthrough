@@ -1,0 +1,10 @@
+# level03
+#
+
+in this level the program takes one number as input, then passes that number into function test
+
+after that inside test it performs a check if (0x1337d00d - our_input) is included in this range ]0, 9] U [16, 21], if true it calls decrypt with (0x1337d00d - our_input) as argument
+
+decrypt takes an a key as an argument and descripts a xor cipher, with cipher text: "Q}|u`sfg~sf{}|a3" and the desired clear text is "Congratulations!", now we have to figure out the key.
+
+since a xor b = c then b = a xor c, therefore the key is ord('Q') xor ord('C') which equals to 18,  then our input will be 322424827 since (0x1337d00d - 322424827) equals 18

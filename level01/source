@@ -1,51 +1,44 @@
-a_user_name = "";
+#include <stdio.h>
 
-int verify_user_pass(char *param_1)
+char	a_user_name[0x100];
+
+int	verify_user_name(void)
 {
-  char *pbVar2;
-  pbVar2 = (char *)"admin";
-  
-  return (strncmp(pbVar2,param_1,5));
+	puts("verifying username....\n");
+	if (!strncmp(a_user_name, "dat_wil", 0x7))
+		return 0;
+	return 1;
 }
 
-int verify_user_name(void)
+int	verify_user_pass(char *pass)
 {
-  char *pbVar3;
-  
-  puts("verifying username....\n");
-  pbVar3 = (char *)"dat_wil";
-  return (strncmp(pbVar3, a_user_name,7));
+	if (!strncmp(pass, "admin", 0x5))
+		return 0;
+	return 1;
 }
 
-
-
-int main(void)
+int	main(void)
 {
-  int iVar1; 
-  char local_54 [16];
-  int local_14;
+	char local_esp_0x1c[0x10];
+	int  local_esp_0x5c = 0;
 
-  local_14 = 0;
-  puts("********* ADMIN LOGIN PROMPT *********");
-  printf("Enter Username: ");
-  fgets(a_user_name,0x100,stdin);
-  local_14 = verify_user_name();
-  if (local_14 == 0) {
-    puts("Enter Password: ");
-    fgets((char *)local_54,100,stdin);
-    local_14 = verify_user_pass(local_54);
-    if ((local_14 == 0) || (local_14 != 0)) {
-      puts("nope, incorrect password...\n");
-      iVar1 = 1;
-    }
-    else {
-      iVar1 = 0;
-    }
-  }
-  else {
-    puts("nope, incorrect username...\n");
-    iVar1 = 1;
-  }
-  return iVar1;
+	memset(local_esp_0x1c, 0, 0x10);
+	puts("********* ADMIN LOGIN PROMPT *********");
+	printf("Enter Username: ");
+	fgets(a_user_name, 0x100, stdin);
+	int _return = verify_user_name();
+	if (_return != 0)
+	{
+		puts("nope, incorrect username...\n");
+		return (1);
+	}
+	puts("Enter Password: ");
+	fgets(local_esp_0x1c, 0x64, stdin);
+	local_esp_0x5c = verify_user_pass(local_esp_0x1c);
+	if (local_esp_0x5c != 0)
+	{
+		puts("nope, incorrect password...\n");
+		return 1;
+	}
+	return 0;
 }
-
